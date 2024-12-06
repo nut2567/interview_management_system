@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User_info {
+  id        Int         @id @default(autoincrement())
+  Name      String
+  createdAt DateTime    @default(now())
+  age       Float
+  email     String      @unique
+  image     String
+  phone     String
+  role      String
+  Interview Interview[]
+  Comment   Comment[]
+}
+
+model Interview {
+  id        Int       @id @default(autoincrement())
+  Title     String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  status    String
+  detail    String
+  image     String?
+  create_by Int
+  update_by Int
+  Comment   Comment[]
+  History   History[]
+  user      User_info @relation(fields: [create_by], references: [id])
+}
+
+model Comment {
+  id          Int       @id @default(autoincrement())
+  content     String // เพิ่มข้อความความคิดเห็น
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now())
+  status      String
+  create_by   Int
+  InterviewId Int
+  user        User_info @relation(fields: [create_by], references: [id])
+  Interview   Interview @relation(fields: [InterviewId], references: [id])
+}
+
+model History {
+  id          Int       @id @default(autoincrement())
+  status      String
+  detail      String
+  Title       String
+  createdAt   DateTime  @default(now())
+  InterviewId Int
+  Interview   Interview @relation(fields: [InterviewId], references: [id])
+}

@@ -1,0 +1,51 @@
+const user = [
+  {
+    Name: "bukky",
+    age: 3.5,
+    email: "bukky@home.com",
+    image: "/bukky.jpg",
+    phone: "098-9895888",
+    role: "Sr.develop",
+  },
+  {
+    Name: "deisy",
+    age: 1.2,
+    email: "deisy@home.com",
+    image: "/S__7667726_0.jpg",
+    phone: "098-9895888",
+    role: "Lead",
+  },
+  {
+    Name: "Robinhood",
+    age: 30,
+    email: "Robinhood@Robinhood.com",
+    image: "/nut.jpg",
+    phone: "5",
+    role: "HR",
+  },
+  {
+    Name: "Jon Snow",
+    age: 40,
+    email: "Jon_Snow@filllikecool.com",
+    image: "/Jon_Snow.png",
+    phone: "088-8885648",
+    role: "admin",
+  },
+  {
+    Name: "Nutthawat",
+    age: 28,
+    email: "Nutthawat@gmail.com",
+    image: "/20191216_082746.jpg",
+    phone: "098-2691859",
+    role: "HR",
+  },
+  {
+    Name: "Titan",
+    age: 40,
+    email: "Titan@gmail.com",
+    image: "/Titan.jpg",
+    phone: "026-755888",
+    role: "Manager",
+  },
+];
+module.exports = user;

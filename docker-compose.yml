@@ -1,0 +1,39 @@
+services:
+  # Database Service
+  postgres:
+    image: postgres:15
+    container_name: postgres_db_ims
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: db_ims
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data_ims:/var/lib/postgresql/data
+    networks:
+      - mynetwork
+
+  # Backend Service
+  api:
+    build:
+      context: ./backend_Expressjs # กำหนด context สำหรับการ build
+      dockerfile: Dockerfile # ใช้ Dockerfile ที่อยู่ในโฟลเดอร์นี้
+    environment:
+      DATABASE_URL: postgres://admin:admin@localhost:5433/db_ims # เชื่อมต่อกับฐานข้อมูล
+    ports:
+      - "3000:3000" # พอร์ตที่ backend ฟัง
+    depends_on:
+      - postgres # รันหลังจาก postgres พร้อมใช้งาน
+    networks:
+      - mynetwork
+
+# กำหนด volumes สำหรับการเก็บข้อมูลของ PostgreSQL
+volumes:
+  postgres_data_ims:
+
+# กำหนด network เพื่อให้ container เชื่อมต่อกันได้
+networks:
+  mynetwork:
+    driver: bridge
