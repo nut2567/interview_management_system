@@ -1,7 +1,8 @@
 const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const bcrypt = require("bcrypt");
 const user = require("../lib/userinfo");
 
+const prisma = new PrismaClient();
 async function main() {
   console.log("Seeding initial users...");
 
@@ -18,6 +19,8 @@ async function main() {
         continue;
       }
 
+      // แฮชรหัสผ่านก่อนบันทึก
+      const hashedPassword = await bcrypt.hash(userData.password, 10);
       await prisma.user_info.create({
         data: {
           Name: userData.Name,
@@ -26,6 +29,7 @@ async function main() {
           image: userData.image,
           phone: userData.phone,
           role: userData.role,
+          password: hashedPassword, // เพิ่มรหัสผ่านที่แฮชแล้ว
         },
       });
 

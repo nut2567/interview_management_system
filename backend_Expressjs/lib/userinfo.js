@@ -6,6 +6,7 @@ const user = [
     image: "/bukky.jpg",
     phone: "098-9895888",
     role: "Sr.develop",
+    password: "securepassword123",
   },
   {
     Name: "deisy",
@@ -14,6 +15,7 @@ const user = [
     image: "/S__7667726_0.jpg",
     phone: "098-9895888",
     role: "Lead",
+    password: "securepassword123",
   },
   {
     Name: "Robinhood",
@@ -22,6 +24,7 @@ const user = [
     image: "/nut.jpg",
     phone: "5",
     role: "HR",
+    password: "mypassword456",
   },
   {
     Name: "Jon Snow",
@@ -30,6 +33,7 @@ const user = [
     image: "/Jon_Snow.png",
     phone: "088-8885648",
     role: "admin",
+    password: "mypassword456",
   },
   {
     Name: "Nutthawat",
@@ -38,6 +42,7 @@ const user = [
     image: "/20191216_082746.jpg",
     phone: "098-2691859",
     role: "HR",
+    password: "mypassword456",
   },
   {
     Name: "Titan",
@@ -46,6 +51,7 @@ const user = [
     image: "/Titan.jpg",
     phone: "026-755888",
     role: "Manager",
+    password: "securepassword123",
   },
 ];
 module.exports = user;

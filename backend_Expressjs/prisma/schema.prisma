@@ -16,6 +16,7 @@ model User_info {
   image     String
   phone     String
   role      String
+  password  String
   Interview Interview[]
   Comment   Comment[]
 }
