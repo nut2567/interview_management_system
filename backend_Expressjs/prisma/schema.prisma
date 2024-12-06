@@ -30,6 +30,7 @@ model Interview {
   detail    String
   image     String?
   user_id   Int
+  active    String
   Comment   Comment[]
   History   History[]
   user      User_info @relation(fields: [user_id], references: [id])

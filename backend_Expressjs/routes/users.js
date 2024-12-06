@@ -17,7 +17,7 @@ router.get("/profile", verifyToken, async function (req, res) {
 
   const user = await prisma.user_info.findFirst({
     where: {
-      email: req.user.email,
+      email: req.user.userInfo.email,
     },
   });
   console.log(req.user);

@@ -41,6 +41,7 @@ async function main() {
           detail: item.detail,
           status: item.Status,
           image: item.image,
+          active: item.active,
           user_id: item.create_by,
         },
       });
