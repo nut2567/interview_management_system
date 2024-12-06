@@ -2,9 +2,6 @@ var express = require("express");
 const jwt = require("jsonwebtoken");
 const verifyToken = require("./middleware/auth");
 
-require("dotenv").config();
-
-const secretKey = process.env.SECRET_KEY || "default_secret_key";
 var router = express.Router();
 
 const { PrismaClient } = require("@prisma/client");
@@ -20,7 +17,7 @@ router.get("/profile", verifyToken, async function (req, res) {
 
   const user = await prisma.user_info.findFirst({
     where: {
-      email: req.user,
+      email: req.user.email,
     },
   });
   console.log(req.user);

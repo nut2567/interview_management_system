@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 const router = express.Router();
 
 // Secret key สำหรับการ sign token
-const secretKey = process.env.SECRET_KEY || "default_secret_key";
+const secretKey = process.env.SECRET_KEY;
 const users = [{ username: "admin", password: "1234" }];
 // POST /users/login
 

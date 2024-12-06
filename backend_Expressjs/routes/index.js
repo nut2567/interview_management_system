@@ -1,4 +1,6 @@
 var express = require("express");
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
 var router = express.Router();
 const verifyToken = require("./middleware/auth");
 
@@ -8,18 +10,58 @@ router.get("/", function (req, res, next) {
 });
 
 router.get("/getInterviewList", verifyToken, async function (req, res) {
-  // ค้นหาผู้ใช้จาก mock data
-
-  const user = await prisma.user_info.findFirst({
+  const interviews = await prisma.Interview.findMany({
     where: {
-      email: req.user,
+      status: {
+        not: "Save",
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
     },
   });
-  console.log(req.user);
-  if (!user) {
-    return res.status(404).json({ message: "User not found!" });
+
+  const total = await prisma.Interview.count({
+    where: {
+      status: {
+        not: "Save",
+      },
+    },
+  });
+
+  console.log(req.user, interviews);
+  if (interviews.length == 0) {
+    return res
+      .status(204)
+      .json({ interviews, message: "list data not found!", total });
   }
-  res.json(user);
+  res.json({ interviews, total });
+});
+
+router.get("/getInterviewById", verifyToken, async function (req, res) {
+  const { id } = req.body;
+
+  const interview = await prisma.Interview.findFirst({
+    where: {
+      AND: [
+        {
+          status: {
+            not: "Save",
+          },
+        },
+        {
+          id: id,
+        },
+      ],
+    },
+  });
+
+  console.log(req.user, interview);
+  if (interview && interview.status !== "Save") {
+    res.json({ interview });
+  } else {
+    return res.status(204).json({ interview, message: "data not found!" });
+  }
 });
 
 module.exports = router;

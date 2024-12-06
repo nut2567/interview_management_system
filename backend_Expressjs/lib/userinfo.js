@@ -1,5 +1,6 @@
 const user = [
   {
+    id: 1,
     Name: "bukky",
     age: 3.5,
     email: "bukky@home.com",
@@ -9,6 +10,7 @@ const user = [
     password: "securepassword123",
   },
   {
+    id: 2,
     Name: "deisy",
     age: 1.2,
     email: "deisy@home.com",
@@ -18,6 +20,7 @@ const user = [
     password: "securepassword123",
   },
   {
+    id: 3,
     Name: "Robinhood",
     age: 30,
     email: "Robinhood@Robinhood.com",
@@ -27,6 +30,7 @@ const user = [
     password: "mypassword456",
   },
   {
+    id: 4,
     Name: "Jon Snow",
     age: 40,
     email: "Jon_Snow@filllikecool.com",
@@ -36,6 +40,7 @@ const user = [
     password: "mypassword456",
   },
   {
+    id: 5,
     Name: "Nutthawat",
     age: 28,
     email: "Nutthawat@gmail.com",
@@ -45,6 +50,7 @@ const user = [
     password: "mypassword456",
   },
   {
+    id: 6,
     Name: "Titan",
     age: 40,
     email: "Titan@gmail.com",

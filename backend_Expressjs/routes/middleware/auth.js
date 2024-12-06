@@ -1,10 +1,11 @@
 const jwt = require("jsonwebtoken");
-const secretKey = process.env.SECRET_KEY || "default_secret_key";
+require("dotenv").config();
+const secretKey = process.env.SECRET_KEY;
 
 // ฟังก์ชันตรวจสอบ JWT token
 function verifyToken(req, res, next) {
   const token = req.headers["authorization"]?.split(" ")[1]; // แยก Bearer และ token
-
+  // console.log(req.headers["authorization"]);
   if (!token) {
     return res.status(403).json({ message: "No token provided." });
   }
