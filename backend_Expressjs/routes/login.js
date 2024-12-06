@@ -2,14 +2,19 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const { PrismaClient } = require("@prisma/client");
 const bcrypt = require("bcrypt");
+require("dotenv").config();
 
 const prisma = new PrismaClient();
 const router = express.Router();
 
 // Secret key สำหรับการ sign token
-const secretKey = env("secretKey");
+const secretKey = process.env.SECRET_KEY || "default_secret_key";
 const users = [{ username: "admin", password: "1234" }];
 // POST /users/login
+
+router.get("/", function (req, res, next) {
+  res.send("respond with a resource");
+});
 
 router.post("/", async function (req, res) {
   const { username, password } = req.body;
