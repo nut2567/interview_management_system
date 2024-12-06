@@ -23,7 +23,7 @@ async function main() {
       const existingCourse = await prisma.Interview.findFirst({
         where: {
           Title: item.Title,
-          create_by: item.create_by,
+          user_id: item.create_by,
         },
       });
 
@@ -41,13 +41,7 @@ async function main() {
           detail: item.detail,
           status: item.Status,
           image: item.image,
-          create_by: item.create_by,
-          update_by: item.create_by,
-          user: {
-            connect: {
-              id: item.create_by,
-            },
-          },
+          user_id: item.create_by,
         },
       });
 

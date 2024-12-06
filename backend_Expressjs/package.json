@@ -6,7 +6,8 @@
     "start": "node ./bin/www",
     "dev": "nodemon ./bin/www",
     "user_seed": "node prisma/user_seed.js",
-    "list_seed": "node prisma/interview_seed.js"
+    "list_seed": "node prisma/interview_seed.js",
+    "seed": "npm run user_seed && npm run list_seed"
   },
   "dependencies": {
     "@prisma/client": "^6.0.1",
