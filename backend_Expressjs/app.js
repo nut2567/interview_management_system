@@ -58,8 +58,9 @@ const loginLimiter = rateLimit({
 });
 
 app.use("/", globalLimiter);
-// app.post("/login", loginLimiter);
-app.use("/login", limiter);
+app.post("/login", loginLimiter);
+app.post("/users", loginLimiter);
+// app.use("/login", limiter);
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
