@@ -2,7 +2,7 @@ var express = require("express");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 var router = express.Router();
-const verifyToken = require("./middleware/auth");
+const { verifyToken, authorize } = require("./middleware/auth");
 
 /* GET home page. */
 
@@ -11,87 +11,46 @@ router.get("/", function (req, res, next) {
 });
 
 router.get("/getCommentList", verifyToken, async function (req, res) {
-  const interviews = await prisma.Interview.findMany({
+  const { InterviewId } = req.body;
+  const Comments = await prisma.Comment.findMany({
     where: {
-      AND: [
-        {
-          active: {
-            not: "Save",
-          },
-        },
-        {
-          user_id: req.user.userInfo.id,
-        },
-      ],
+      InterviewId,
+      user_id: req.user.userInfo.id,
     },
     orderBy: {
       createdAt: "desc",
     },
-    include: {
-      user: {
-        select: {
-          Name: true,
-          email: true,
-          createdAt: true,
-          age: true,
-          image: true,
-          phone: true,
-          role: true,
-        },
-      },
-    },
   });
 
-  const total = await prisma.Interview.count({
-    where: {
-      AND: [
-        {
-          active: {
-            not: "Save",
-          },
-        },
-        {
-          user_id: req.user.userInfo.id,
-        },
-      ],
-    },
+  const total = await prisma.Comment.count({
+    where: { InterviewId, user_id: req.user.userInfo.id },
   });
 
-  console.log(req.user, interviews);
-  if (interviews.length == 0) {
+  console.log(req.user, Comments);
+  if (Comments.length == 0) {
     return res
-      .status(204)
-      .json({ interviews, message: "list data not found!", total });
+      .status(200)
+      .json({ Comments, message: "list data not found!", total });
   }
-  res.json({ interviews, total });
+  res.json({ Comments, total });
 });
 
 router.get("/getCommentById", verifyToken, async function (req, res) {
-  const { id } = req.body;
-  let interview = await prisma.Interview.findFirst({
+  const { id, InterviewId } = req.body;
+  let Comment = await prisma.Comment.findFirst({
     where: {
-      AND: [
-        {
-          active: {
-            not: "Save",
-          },
-        },
-        {
-          id: id,
-        },
-        {
-          user_id: req.user.userInfo.id,
-        },
-      ],
+      id,
+      InterviewId,
+      user_id: req.user.userInfo.id,
     },
   });
 
-  console.log(req.user, interview);
-  if (interview && interview.status !== "Save") {
-    res.json({ interview });
+  console.log(req.user, Comment);
+  if (Comment) {
+    res.json({ Comment });
   } else {
-    interview = interview ?? {};
-    return res.status(200).json({ interview, message: "data not found!" });
+    Comment = Comment ?? {};
+    return res.status(200).json({ Comment, message: "data not found!" });
   }
 });
 
@@ -126,31 +85,34 @@ router.post("/createComment", verifyToken, async function (req, res) {
 });
 
 router.put("/updateComment", verifyToken, async function (req, res) {
-  const { id, content, InterviewId } = req.body;
-
-  if (!id) {
-    return res.status(400).json({ message: "Comment ID is required!" });
-  }
+  const { id, content } = req.body;
 
   const time = new Date();
-  if (!content || !InterviewId) {
+  if (!content && !id) {
     return res.status(400).json({
       time,
-      message: "content ,InterviewId are required",
+      message: "content Comment ID is required",
     });
   }
 
   const existingcomment = await prisma.comment.findFirst({
     where: {
       id: id,
-      InterviewId: InterviewId,
+      user_id: req.user.userInfo.id,
     },
   });
   console.log(existingcomment);
-  if (existingcomment && existingcomment.user_id != req.user.userInfo.id) {
+  if (!existingcomment) {
     return res.status(400).json({
       time,
       message: "ผู้ใช้นี้ไม่ได้เป็นเจ้าของความคิดเห็น",
+    });
+  }
+
+  if (existingcomment.content == content) {
+    return res.status(400).json({
+      time,
+      message: "ความคิดเห็นเดิมแก้ไขหรือเปลี่ยนแปลงก่อนบันทึก",
     });
   }
 
@@ -163,12 +125,11 @@ router.put("/updateComment", verifyToken, async function (req, res) {
       data: {
         content,
         user_id: req.user.userInfo.id,
-        InterviewId,
+        InterviewId: existingcomment.InterviewId,
         status: "",
         updatedAt: time,
       },
     });
-
     res.json({
       message: "Comment updated successfully!",
       updatedcomment,
@@ -181,33 +142,30 @@ router.put("/updateComment", verifyToken, async function (req, res) {
 
 router.delete("/DeleteComment", verifyToken, async function (req, res) {
   const { id } = req.body;
-
   const time = new Date();
   try {
-    // ตรวจสอบว่ามี interview สำหรับ id และ user_id นี้หรือไม่
-    const interview = await prisma.Interview.findFirst({
+    const comment = await prisma.comment.findFirst({
       where: {
         id: id,
         user_id: req.user.userInfo.id,
       },
     });
 
-    if (!interview) {
+    if (!comment) {
       return res
         .status(404)
-        .json({ message: "Comment ID not found for this user!", time });
+        .json({ message: "ผู้ใช้นี้ไม่ได้เป็นเจ้าของความคิดเห็น", time });
     }
-
-    // ลบ interview
-    const deletedInterview = await prisma.Interview.delete({
+    const deletedcomment = await prisma.comment.delete({
       where: {
         id: id,
+        user_id: req.user.userInfo.id,
       },
     });
 
     res.json({
       message: "Comment deleted successfully!",
-      deletedInterview,
+      deletedcomment,
       time,
     });
   } catch (error) {

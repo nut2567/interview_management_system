@@ -2,86 +2,83 @@ var express = require("express");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 var router = express.Router();
-const verifyToken = require("./middleware/auth");
+const { verifyToken, authorize } = require("./middleware/auth");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
   res.render("index", { title: "Express" });
 });
 
-router.get("/getInterviewList", verifyToken, async function (req, res) {
-  const interviews = await prisma.Interview.findMany({
-    where: {
-      AND: [
-        {
-          active: {
-            not: "Save",
+router.get(
+  "/getInterviewList/:limit",
+  verifyToken,
+  authorize(["admin,HR"]),
+  async function (req, res) {
+    const limit = parseInt(req.params.limit) || 3;
+    const interviews = await prisma.Interview.findMany({
+      where: {
+        AND: [
+          {
+            active: {
+              not: "Save",
+            },
           },
-        },
-        {
-          user_id: req.user.userInfo.id,
-        },
-      ],
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    include: {
-      user: {
-        select: {
-          Name: true,
-          email: true,
-          createdAt: true,
-          age: true,
-          image: true,
-          phone: true,
-          role: true,
-        },
+          {
+            user_id: req.user.userInfo.id,
+          },
+        ],
       },
-    },
-  });
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: limit,
+    });
 
-  const total = await prisma.Interview.count({
-    where: {
-      AND: [
-        {
-          active: {
-            not: "Save",
-          },
+    const total = await prisma.Interview.count({
+      where: {
+        active: {
+          not: "Save",
         },
-        {
-          user_id: req.user.userInfo.id,
-        },
-      ],
-    },
-  });
+        user_id: req.user.userInfo.id,
+      },
+    });
 
-  console.log(req.user, interviews);
-  if (interviews.length == 0) {
-    return res
-      .status(204)
-      .json({ interviews, message: "list data not found!", total });
+    console.log(req.user, interviews);
+    if (interviews.length == 0) {
+      return res
+        .status(200)
+        .json({ interviews, message: "list data not found!", total });
+    }
+    res.json({ interviews, total });
   }
-  res.json({ interviews, total });
-});
+);
 
 router.get("/getInterviewById", verifyToken, async function (req, res) {
   const { id } = req.body;
   let interview = await prisma.Interview.findFirst({
     where: {
-      AND: [
+      active: {
+        not: "Save",
+      },
+      id: id,
+      user_id: req.user.userInfo.id,
+    },
+    include: {
+      user:
+        // true
         {
-          active: {
-            not: "Save",
+          select: {
+            Name: true,
+            email: true,
+            createdAt: true,
+            age: true,
+            image: true,
+            phone: true,
+            role: true,
           },
         },
-        {
-          id: id,
-        },
-        {
-          user_id: req.user.userInfo.id,
-        },
-      ],
+      Comment: true,
+      History: true,
     },
   });
 
@@ -172,7 +169,7 @@ router.put("/updateInterview", verifyToken, async function (req, res) {
     if (!existingInterview) {
       return res.status(404).json({
         time,
-        message: "ผู้ใช้นี้ไม่มีชื่อรายการนี้อยู่",
+        message: "ผู้ใช้นี้ไม่มีชื่อรายการนี้อยู่หรือไม่มีสิทธิแก้ไข",
       });
     }
 
@@ -199,13 +196,14 @@ router.put("/updateInterview", verifyToken, async function (req, res) {
       },
       data: {
         Title,
-        image,
+        image: image || existingInterview.image,
         detail,
         status,
         updatedAt: time,
       },
     });
 
+    await addHistory(existingInterview);
     res.json({
       message: "Interview updated successfully!",
       updatedInterview,
@@ -215,6 +213,23 @@ router.put("/updateInterview", verifyToken, async function (req, res) {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
+async function addHistory({ Title, status, detail, id }) {
+  try {
+    // สร้างรายการใหม่
+    const History = await prisma.History.create({
+      data: {
+        detail,
+        Title,
+        InterviewId: id,
+        status,
+      },
+    });
+    console.log(req.user, History);
+  } catch (error) {
+    console.error("Error creating History:", error);
+  }
+}
 
 router.delete("/DeleteInterview", verifyToken, async function (req, res) {
   const { id } = req.body;
@@ -253,4 +268,47 @@ router.delete("/DeleteInterview", verifyToken, async function (req, res) {
   }
 });
 
+router.put("/updateInterviewActive", verifyToken, async function (req, res) {
+  const { id } = req.body; // เพิ่ม `id` เพื่อระบุข้อมูลที่ต้องอัปเดต
+
+  if (!id) {
+    return res.status(400).json({ message: "Interview ID is required!" });
+  }
+
+  const time = new Date();
+  try {
+    // ตรวจสอบว่าข้อมูลที่จะอัปเดตมีอยู่ในฐานข้อมูลหรือไม่
+    const existingInterview = await prisma.Interview.findFirst({
+      where: {
+        id: id,
+        user_id: req.user.userInfo.id, // ตรวจสอบว่าผู้ใช้นี้เป็นเจ้าของ
+      },
+    });
+
+    if (!existingInterview) {
+      return res.status(404).json({
+        time,
+        message: "ผู้ใช้นี้ไม่มีชื่อรายการนี้อยู่หรือไม่มีสิทธิแก้ไข",
+      });
+    }
+
+    // อัปเดตข้อมูล
+    const updatedInterview = await prisma.Interview.update({
+      where: {
+        id: id,
+      },
+      data: {
+        active: "Save",
+        updatedAt: time,
+      },
+    });
+    res.json({
+      message: "Interview updated successfully!",
+      updatedInterview,
+    });
+  } catch (error) {
+    console.error("Error updating interview:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
 module.exports = router;
