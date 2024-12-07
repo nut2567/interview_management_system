@@ -19,9 +19,9 @@ services:
   api:
     build:
       context: ./backend_Expressjs # กำหนด context สำหรับการ build
-      dockerfile: Dockerfile # ใช้ Dockerfile ที่อยู่ในโฟลเดอร์นี้
+      dockerfile: Dockerfile # ใช้ Dockerfile ที่อยู่ในโฟลเดอร์นี้      
     environment:
-      DATABASE_URL: postgres://admin:admin@localhost:5433/db_ims # เชื่อมต่อกับฐานข้อมูล
+      DATABASE_URL: postgres://admin:admin@postgres:5432/db_ims
     ports:
       - "3000:3000" # พอร์ตที่ backend ฟัง
     depends_on:

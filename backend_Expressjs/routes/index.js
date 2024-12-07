@@ -9,8 +9,9 @@ router.get("/", function (req, res, next) {
   res.render("index", { title: "Express" });
 });
 
-router.get("/getInterviewList/:limit", verifyToken, async function (req, res) {
-  const limit = parseInt(req.params.limit) || 3;
+router.get("/getInterviewList", verifyToken, async function (req, res) {
+  // const limit = parseInt(req.params.limit) || 3;
+  const limit = parseInt(req.query.limit || 3); // ค่า default เป็น 10 ถ้าไม่ส่งมา
   const interviews = await prisma.Interview.findMany({
     where: {
       AND: [

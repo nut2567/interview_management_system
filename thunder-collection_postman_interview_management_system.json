@@ -1,0 +1,310 @@
+{
+    "info": {
+        "_postman_id": "1d5eb535-5895-4f58-b82a-d723025ee4b4",
+        "name": "interview_management_system",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "description": ""
+    },
+    "item": [
+        {
+            "name": "http://localhost:3000/login",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:3000/login",
+                    "path": [
+                        "login"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n    \"password\": \"mypassword456\",\n    \"username\": \"Nutthawat@gmail.com\"\n}"
+                }
+            }
+        },
+        {
+            "name": "http://localhost:3000/createInterview",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:3000/createInterview",
+                    "path": [
+                        "createInterview"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZCI6NSwiTmFtZSI6Ik51dHRoYXdhdCIsImNyZWF0ZWRBdCI6IjIwMjQtMTItMDZUMTg6NTk6NDMuNDQ1WiIsImFnZSI6MjgsImVtYWlsIjoiTnV0dGhhd2F0QGdtYWlsLmNvbSIsImltYWdlIjoiLzIwMTkxMjE2XzA4Mjc0Ni5qcGciLCJwaG9uZSI6IjA5OC0yNjkxODU5Iiwicm9sZSI6IkhSIiwicGFzc3dvcmQiOiIkMmIkMTAkZVhZU1RJMXozWC9yLmd6RTJHd3VlT2FNWkpKbXVENU52NHgzRWx1eGFyYU02elI0andhTnEifSwiaWF0IjoxNzMzNTIwMTgzLCJleHAiOjE3MzM1MjM3ODN9.cXPRakETG3peURqBwZVPrjRhSc83ObZzRz-AMFj9s6Q"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"Title\": \"5\",\n  \"status\": \"To Do\",\n  \"detail\": \"123\",\n  \"image\": \"\"\n}"
+                }
+            }
+        },
+        {
+            "name": "http://localhost:3000/getInterviewById",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost:3000/getInterviewById",
+                    "path": [
+                        "getInterviewById"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZCI6NiwiTmFtZSI6Ik51dHRoYXdhdCIsImNyZWF0ZWRBdCI6IjIwMjQtMTItMDZUMTg6NTk6NDMuNDQ1WiIsImFnZSI6MjgsImVtYWlsIjoiTnV0dGhhd2F0QGdtYWlsLmNvbSIsImltYWdlIjoiLzIwMTkxMjE2XzA4Mjc0Ni5qcGciLCJwaG9uZSI6IjA5OC0yNjkxODU5Iiwicm9sZSI6InVzZXIiLCJwYXNzd29yZCI6IiQyYiQxMCRlWFlTVEkxejNYL3IuZ3pFMkd3dWVPYU1aSkptdUQ1TnY0eDNFbHV4YXJhTTZ6UjRqd2FOcSJ9LCJpYXQiOjE3MzM1NTAwMzgsImV4cCI6MTczMzU1MzYzOH0.cxtUgJTiMygvPH2kNCnAS7TAF33TGP-DDCxqDrbTxY8"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n    \"id\": 23\n}"
+                }
+            }
+        },
+        {
+            "name": "http://localhost:3000/users/profile",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost:3000/users/profile",
+                    "path": [
+                        "users",
+                        "profile"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZCI6NSwiTmFtZSI6Ik51dHRoYXdhdCIsImNyZWF0ZWRBdCI6IjIwMjQtMTItMDZUMTg6NTk6NDMuNDQ1WiIsImFnZSI6MjgsImVtYWlsIjoiTnV0dGhhd2F0QGdtYWlsLmNvbSIsImltYWdlIjoiLzIwMTkxMjE2XzA4Mjc0Ni5qcGciLCJwaG9uZSI6IjA5OC0yNjkxODU5Iiwicm9sZSI6IkhSIiwicGFzc3dvcmQiOiIkMmIkMTAkZVhZU1RJMXozWC9yLmd6RTJHd3VlT2FNWkpKbXVENU52NHgzRWx1eGFyYU02elI0andhTnEifSwiaWF0IjoxNzMzNTE1MzI1LCJleHAiOjE3MzM1MTg5MjV9.8xnMNj0xwstvAoCaRoDGsJW5qoUtOE_te_ZR48xKQNs"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "http://localhost:3000/getInterviewList",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost:3000/getInterviewList",
+                    "path": [
+                        "getInterviewList"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZCI6NSwiTmFtZSI6Ik51dHRoYXdhdCIsImNyZWF0ZWRBdCI6IjIwMjQtMTItMDZUMTg6NTk6NDMuNDQ1WiIsImFnZSI6MjgsImVtYWlsIjoiTnV0dGhhd2F0QGdtYWlsLmNvbSIsImltYWdlIjoiLzIwMTkxMjE2XzA4Mjc0Ni5qcGciLCJwaG9uZSI6IjA5OC0yNjkxODU5Iiwicm9sZSI6IkhSIiwicGFzc3dvcmQiOiIkMmIkMTAkZVhZU1RJMXozWC9yLmd6RTJHd3VlT2FNWkpKbXVENU52NHgzRWx1eGFyYU02elI0andhTnEifSwiaWF0IjoxNzMzNTM5NjAwLCJleHAiOjE3MzM1NDMyMDB9.COtvof41CttSMdfYqqaSjpojnn3Gqg2TuZMM4Lm2q4w"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "http://localhost:3000/comment/createComment",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:3000/comment/createComment",
+                    "path": [
+                        "comment",
+                        "createComment"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZCI6NSwiTmFtZSI6Ik51dHRoYXdhdCIsImNyZWF0ZWRBdCI6IjIwMjQtMTItMDZUMTg6NTk6NDMuNDQ1WiIsImFnZSI6MjgsImVtYWlsIjoiTnV0dGhhd2F0QGdtYWlsLmNvbSIsImltYWdlIjoiLzIwMTkxMjE2XzA4Mjc0Ni5qcGciLCJwaG9uZSI6IjA5OC0yNjkxODU5Iiwicm9sZSI6IkhSIiwicGFzc3dvcmQiOiIkMmIkMTAkZVhZU1RJMXozWC9yLmd6RTJHd3VlT2FNWkpKbXVENU52NHgzRWx1eGFyYU02elI0andhTnEifSwiaWF0IjoxNzMzNTM5NjAwLCJleHAiOjE3MzM1NDMyMDB9.COtvof41CttSMdfYqqaSjpojnn3Gqg2TuZMM4Lm2q4w"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"content\": \"123456\",\n  \"InterviewId\": 25\n}"
+                }
+            }
+        },
+        {
+            "name": "http://localhost:3000/comment/updateComment",
+            "request": {
+                "method": "PUT",
+                "url": {
+                    "raw": "http://localhost:3000/comment/updateComment",
+                    "path": [
+                        "comment",
+                        "updateComment"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZCI6NSwiTmFtZSI6Ik51dHRoYXdhdCIsImNyZWF0ZWRBdCI6IjIwMjQtMTItMDZUMTg6NTk6NDMuNDQ1WiIsImFnZSI6MjgsImVtYWlsIjoiTnV0dGhhd2F0QGdtYWlsLmNvbSIsImltYWdlIjoiLzIwMTkxMjE2XzA4Mjc0Ni5qcGciLCJwaG9uZSI6IjA5OC0yNjkxODU5Iiwicm9sZSI6IkhSIiwicGFzc3dvcmQiOiIkMmIkMTAkZVhZU1RJMXozWC9yLmd6RTJHd3VlT2FNWkpKbXVENU52NHgzRWx1eGFyYU02elI0andhTnEifSwiaWF0IjoxNzMzNTM2NzU4LCJleHAiOjE3MzM1NDAzNTh9.r7P6W9AGB1-0QqxvFC9rgQtOwMcBpEtWnFrRTI-Nx6I"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"id\": 2,\n  \"content\": \"test\",\n  \"InterviewId\": 25\n}"
+                }
+            }
+        },
+        {
+            "name": "http://localhost:3000/comment/DeleteComment",
+            "request": {
+                "method": "DELETE",
+                "url": {
+                    "raw": "http://localhost:3000/comment/DeleteComment",
+                    "path": [
+                        "comment",
+                        "DeleteComment"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZCI6NSwiTmFtZSI6Ik51dHRoYXdhdCIsImNyZWF0ZWRBdCI6IjIwMjQtMTItMDZUMTg6NTk6NDMuNDQ1WiIsImFnZSI6MjgsImVtYWlsIjoiTnV0dGhhd2F0QGdtYWlsLmNvbSIsImltYWdlIjoiLzIwMTkxMjE2XzA4Mjc0Ni5qcGciLCJwaG9uZSI6IjA5OC0yNjkxODU5Iiwicm9sZSI6IkhSIiwicGFzc3dvcmQiOiIkMmIkMTAkZVhZU1RJMXozWC9yLmd6RTJHd3VlT2FNWkpKbXVENU52NHgzRWx1eGFyYU02elI0andhTnEifSwiaWF0IjoxNzMzNTM2NzU4LCJleHAiOjE3MzM1NDAzNTh9.r7P6W9AGB1-0QqxvFC9rgQtOwMcBpEtWnFrRTI-Nx6I"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"id\": 6\n}"
+                }
+            }
+        },
+        {
+            "name": "http://localhost:3000/updateInterview",
+            "request": {
+                "method": "PUT",
+                "url": {
+                    "raw": "http://localhost:3000/updateInterview",
+                    "path": [
+                        "updateInterview"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZCI6NiwiTmFtZSI6Ik51dHRoYXdhdCIsImNyZWF0ZWRBdCI6IjIwMjQtMTItMDZUMTg6NTk6NDMuNDQ1WiIsImFnZSI6MjgsImVtYWlsIjoiTnV0dGhhd2F0QGdtYWlsLmNvbSIsImltYWdlIjoiLzIwMTkxMjE2XzA4Mjc0Ni5qcGciLCJwaG9uZSI6IjA5OC0yNjkxODU5Iiwicm9sZSI6InVzZXIiLCJwYXNzd29yZCI6IiQyYiQxMCRlWFlTVEkxejNYL3IuZ3pFMkd3dWVPYU1aSkptdUQ1TnY0eDNFbHV4YXJhTTZ6UjRqd2FOcSJ9LCJpYXQiOjE3MzM1NDkwNjUsImV4cCI6MTczMzU1MjY2NX0.ZMwvm6ziPMz8MSf7IP6UHBtASwKdDL0JCmR58DHR7nU"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"Title\": \"นัดสัมภาษณ์งาน 15\",\n  \"id\": 23,\n  \"status\": \"To Do\",\n  \"detail\": \"123444444444444444\",\n  \"image\": \"\"\n}"
+                }
+            }
+        },
+        {
+            "name": "http://localhost:3000/DeleteInterview",
+            "request": {
+                "method": "DELETE",
+                "url": {
+                    "raw": "http://localhost:3000/DeleteInterview",
+                    "path": [
+                        "DeleteInterview"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZCI6NSwiTmFtZSI6Ik51dHRoYXdhdCIsImNyZWF0ZWRBdCI6IjIwMjQtMTItMDZUMTg6NTk6NDMuNDQ1WiIsImFnZSI6MjgsImVtYWlsIjoiTnV0dGhhd2F0QGdtYWlsLmNvbSIsImltYWdlIjoiLzIwMTkxMjE2XzA4Mjc0Ni5qcGciLCJwaG9uZSI6IjA5OC0yNjkxODU5Iiwicm9sZSI6IkhSIiwicGFzc3dvcmQiOiIkMmIkMTAkZVhZU1RJMXozWC9yLmd6RTJHd3VlT2FNWkpKbXVENU52NHgzRWx1eGFyYU02elI0andhTnEifSwiaWF0IjoxNzMzNTI0MzY1LCJleHAiOjE3MzM1Mjc5NjV9.lR1cUcfWKM8sXAxjmi38d8kwgeVavgpZ5KhuEnPVD6Y"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"id\": 28\n}"
+                }
+            }
+        }
+    ]
+}
