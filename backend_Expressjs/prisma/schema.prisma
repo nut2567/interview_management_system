@@ -28,7 +28,7 @@ model Interview {
   updatedAt DateTime  @updatedAt
   status    String
   detail    String
-  image     String?
+  image     String?   @default("")
   user_id   Int
   active    String
   Comment   Comment[]
@@ -41,7 +41,7 @@ model Comment {
   content     String // เพิ่มข้อความความคิดเห็น
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @default(now())
-  status      String
+  status      String?   @default("")
   user_id     Int
   InterviewId Int
   user        User_info @relation(fields: [user_id], references: [id])

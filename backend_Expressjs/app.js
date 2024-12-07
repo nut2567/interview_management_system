@@ -6,17 +6,18 @@ var logger = require("morgan");
 const rateLimit = require("express-rate-limit");
 
 const cors = require("cors");
+
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
-
 const loginRouter = require("./routes/login");
+const commentRouter = require("./routes/comment");
 
 var app = express();
 
 app.use(
   cors({
     origin: "http://localhost:3000", // อนุญาตให้โดเมนนี้เข้าถึง
-    methods: ["GET", "POST", "PUT", "DELETE"], // วิธีที่อนุญาต
+    methods: ["get", "post", "put", "delete"], // วิธีที่อนุญาต
     credentials: true, // ถ้าคุณต้องการส่ง cookies หรือ HTTP Auth
   })
 );
@@ -33,13 +34,16 @@ app.use(express.static(path.join(__dirname, "public")));
 
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000,
-  max: 5, // จำกัด 100 requests ต่อ 15 นาทีต่อ IP
-  // message: { message: "Too many requests, please try again later." },
+  max: 10,
   handler: (req, res, next) => {
     console.log("Rate limit exceeded for:", req.ip);
     res
       .status(429)
       .json({ message: "Too many login attempts, please try again later." });
+  },
+  keyGenerator: (req, res) => {
+    // ใช้ IP รวมกับเส้นทาง (path) เป็น key
+    return `${req.ip}-${req.originalUrl}`;
   },
 });
 
@@ -48,6 +52,10 @@ const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 นาที
   max: 100, // จำกัด 100 requests ต่อ 15 นาที
   message: "Too many requests, please try again later.",
+  keyGenerator: (req, res) => {
+    // ใช้ IP รวมกับเส้นทาง (path) เป็น key
+    return `${req.ip}-${req.originalUrl}`;
+  },
 });
 
 // จำกัดเฉพาะเส้นทางล็อกอิน
@@ -57,14 +65,16 @@ const loginLimiter = rateLimit({
   message: "Too many login attempts, please try again later.",
 });
 
-app.use("/", globalLimiter);
-app.post("/login", loginLimiter);
-app.post("/users", loginLimiter);
+app.use("/", limiter);
+app.use("/login", loginLimiter);
+app.get("/users", loginLimiter);
+app.use("/comment", globalLimiter);
 // app.use("/login", limiter);
 
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
+app.get("/users", usersRouter);
 app.use("/login", loginRouter);
+app.use("/comment", commentRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
