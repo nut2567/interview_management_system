@@ -9,59 +9,54 @@ router.get("/", function (req, res, next) {
   res.render("index", { title: "Express" });
 });
 
-router.get(
-  "/getInterviewList/:limit",
-  verifyToken,
-  authorize(["admin,HR"]),
-  async function (req, res) {
-    const limit = parseInt(req.params.limit) || 3;
-    const interviews = await prisma.Interview.findMany({
-      where: {
-        AND: [
-          {
-            active: {
-              not: "Save",
-            },
+router.get("/getInterviewList/:limit", verifyToken, async function (req, res) {
+  const limit = parseInt(req.params.limit) || 3;
+  const interviews = await prisma.Interview.findMany({
+    where: {
+      AND: [
+        {
+          active: {
+            notIn: ["Save", "delete"],
           },
-          {
-            user_id: req.user.userInfo.id,
-          },
-        ],
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-      take: limit,
-    });
-
-    const total = await prisma.Interview.count({
-      where: {
-        active: {
-          not: "Save",
         },
-        user_id: req.user.userInfo.id,
-      },
-    });
+        // {
+        //   user_id: req.user.userInfo.id,
+        // },
+      ],
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: limit,
+  });
 
-    console.log(req.user, interviews);
-    if (interviews.length == 0) {
-      return res
-        .status(200)
-        .json({ interviews, message: "list data not found!", total });
-    }
-    res.json({ interviews, total });
+  const total = await prisma.Interview.count({
+    where: {
+      active: {
+        notIn: ["Save", "delete"],
+      },
+      // user_id: req.user.userInfo.id,
+    },
+  });
+
+  console.log(req.user, interviews);
+  if (interviews.length == 0) {
+    return res
+      .status(200)
+      .json({ interviews, message: "list data not found!", total });
   }
-);
+  res.json({ interviews, total });
+});
 
 router.get("/getInterviewById", verifyToken, async function (req, res) {
   const { id } = req.body;
   let interview = await prisma.Interview.findFirst({
     where: {
       active: {
-        not: "Save",
+        notIn: ["Save", "delete"],
       },
       id: id,
-      user_id: req.user.userInfo.id,
+      // user_id: req.user.userInfo.id,
     },
     include: {
       user:
@@ -162,7 +157,7 @@ router.put("/updateInterview", verifyToken, async function (req, res) {
     const existingInterview = await prisma.Interview.findFirst({
       where: {
         id: id,
-        user_id: req.user.userInfo.id, // ตรวจสอบว่าผู้ใช้นี้เป็นเจ้าของ
+        // user_id: req.user.userInfo.id, // ตรวจสอบว่าผู้ใช้นี้เป็นเจ้าของ
       },
     });
 
@@ -177,7 +172,7 @@ router.put("/updateInterview", verifyToken, async function (req, res) {
     const duplicateTitle = await prisma.Interview.findFirst({
       where: {
         Title: Title,
-        user_id: req.user.userInfo.id,
+        // user_id: req.user.userInfo.id,
         NOT: { id: id }, // ยกเว้นรายการนี้เอง
       },
     });
@@ -185,7 +180,7 @@ router.put("/updateInterview", verifyToken, async function (req, res) {
     if (duplicateTitle) {
       return res.status(400).json({
         time,
-        message: "ผู้ใช้นี้มีชื่อรายการนี้มีอยู่แล้ว กรุณาใช้ชื่ออื่น",
+        message: "มีชื่อรายการนี้อยู่แล้ว กรุณาใช้ชื่ออื่น",
       });
     }
 
@@ -231,45 +226,50 @@ async function addHistory({ Title, status, detail, id }) {
   }
 }
 
-router.delete("/DeleteInterview", verifyToken, async function (req, res) {
-  const { id } = req.body;
+router.delete(
+  "/DeleteInterview",
+  verifyToken,
+  authorize(["admin,HR"]),
+  async function (req, res) {
+    const { id } = req.body;
 
-  const time = new Date();
-  try {
-    // ตรวจสอบว่ามี interview สำหรับ id และ user_id นี้หรือไม่
-    const interview = await prisma.Interview.findFirst({
-      where: {
-        id: id,
-        user_id: req.user.userInfo.id,
-      },
-    });
+    const time = new Date();
+    try {
+      // ตรวจสอบว่ามี interview สำหรับ id และ user_id นี้หรือไม่
+      const interview = await prisma.Interview.findFirst({
+        where: {
+          id: id,
+          user_id: req.user.userInfo.id,
+        },
+      });
 
-    if (!interview) {
-      return res
-        .status(404)
-        .json({ message: "Interview ID not found for this user!", time });
+      if (!interview) {
+        return res
+          .status(404)
+          .json({ message: "Interview ID not found for this user!", time });
+      }
+
+      // ลบ interview
+      const deletedInterview = await prisma.Interview.delete({
+        where: {
+          id: id,
+        },
+      });
+
+      res.json({
+        message: "Interview deleted successfully!",
+        deletedInterview,
+        time,
+      });
+    } catch (error) {
+      console.error("Error deleting interview:", error);
+      res.status(500).json({ message: "Internal server error" });
     }
-
-    // ลบ interview
-    const deletedInterview = await prisma.Interview.delete({
-      where: {
-        id: id,
-      },
-    });
-
-    res.json({
-      message: "Interview deleted successfully!",
-      deletedInterview,
-      time,
-    });
-  } catch (error) {
-    console.error("Error deleting interview:", error);
-    res.status(500).json({ message: "Internal server error" });
   }
-});
+);
 
 router.put("/updateInterviewActive", verifyToken, async function (req, res) {
-  const { id } = req.body; // เพิ่ม `id` เพื่อระบุข้อมูลที่ต้องอัปเดต
+  const { id, active } = req.body; // เพิ่ม `id` เพื่อระบุข้อมูลที่ต้องอัปเดต
 
   if (!id) {
     return res.status(400).json({ message: "Interview ID is required!" });
@@ -298,7 +298,7 @@ router.put("/updateInterviewActive", verifyToken, async function (req, res) {
         id: id,
       },
       data: {
-        active: "Save",
+        active: active,
         updatedAt: time,
       },
     });

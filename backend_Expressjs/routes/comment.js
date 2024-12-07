@@ -15,7 +15,7 @@ router.get("/getCommentList", verifyToken, async function (req, res) {
   const Comments = await prisma.Comment.findMany({
     where: {
       InterviewId,
-      user_id: req.user.userInfo.id,
+      // user_id: req.user.userInfo.id,
     },
     orderBy: {
       createdAt: "desc",
@@ -23,7 +23,10 @@ router.get("/getCommentList", verifyToken, async function (req, res) {
   });
 
   const total = await prisma.Comment.count({
-    where: { InterviewId, user_id: req.user.userInfo.id },
+    where: {
+      InterviewId,
+      // user_id: req.user.userInfo.id
+    },
   });
 
   console.log(req.user, Comments);
@@ -41,9 +44,14 @@ router.get("/getCommentById", verifyToken, async function (req, res) {
     where: {
       id,
       InterviewId,
-      user_id: req.user.userInfo.id,
+      // user_id: req.user.userInfo.id,
     },
   });
+  if (Comment && Comment.user_id != req.user.userInfo.id) {
+    return res
+      .status(400)
+      .json({ message: "ไม่สามารถแก้รายการความคิดเห็นคนอื่นได้" });
+  }
 
   console.log(req.user, Comment);
   if (Comment) {
@@ -112,7 +120,7 @@ router.put("/updateComment", verifyToken, async function (req, res) {
   if (existingcomment.content == content) {
     return res.status(400).json({
       time,
-      message: "ความคิดเห็นเดิมแก้ไขหรือเปลี่ยนแปลงก่อนบันทึก",
+      message: "แก้ไขความคิดเห็นเดิมก่อนบันทึก",
     });
   }
 
