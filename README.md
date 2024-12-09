@@ -10,7 +10,7 @@
 2. รัน -> docker-compose up --build -d
    ให้แน่ใจว่า Docker เปิดใช้งานในเครื่องของคุณก่อนที่จะทำขั้นตอนนี้
 
-   คำสั่งนี้จะทำการเริ่มต้น PostgreSQL container,express api บนเครื่องของคุณ
+   คำสั่งนี้จะทำการเริ่มต้น PostgreSQL container,express api,web app บนเครื่องของคุณ
    แล้วจะใช้ Prisma Migrations
    รันคำสั่ง Prisma เพื่อสร้าง schema ของฐานข้อมูล:
    -> npx prisma migrate dev --name init
@@ -27,3 +27,5 @@
 
 3. เปิดเว็บ [http://localhost:3000](http://localhost:3000) บนเบราว์เซอร์ของคุณเพื่อทดสอบผลลัพธ์
    หรือใช้ไฟล์ [collection_postman](thunder-collection_postman_interview_management_system.json) ทดสอบ เรียกใช้งาน api service
+
+4. เปิดเว็บ [http://localhost:5000](http://localhost:5000) บนเบราว์เซอร์ของคุณเพื่อเล่นหน้าจอ

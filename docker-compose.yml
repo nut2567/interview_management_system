@@ -27,7 +27,18 @@ services:
     depends_on:
       - postgres # รันหลังจาก postgres พร้อมใช้งาน
     networks:
-      - mynetwork
+      - mynetwork      
+  # Frontend 
+  web:
+    build:
+      context: ./frontend_React # กำหนด context สำหรับการ build
+      dockerfile: Dockerfile # ใช้ Dockerfile ที่อยู่ในโฟลเดอร์นี้
+    ports:
+      - "5000:5000" 
+    depends_on:
+      - api 
+    networks:
+      - mynetwork      
 
 # กำหนด volumes สำหรับการเก็บข้อมูลของ PostgreSQL
 volumes:
