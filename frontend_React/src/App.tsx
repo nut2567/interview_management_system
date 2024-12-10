@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import "./App.css";
+import { Links, useNavigate } from "react-router";
 import axios from "axios";
 
 function App() {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -23,6 +25,8 @@ function App() {
       if (res.statusText != "OK") {
         throw new Error("Login failed");
       }
+
+      navigate("/home");
       localStorage.setItem("token", res.data.token);
     } catch (error) {
       setError("Invalid username or password");
