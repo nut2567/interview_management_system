@@ -13,7 +13,8 @@ function App() {
   const jsonwebtokenLogin = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     try {
-      const res = await axios.post("/api/login", {
+      console.log(import.meta.env.VITE_API);
+      const res = await axios.post(`${import.meta.env.VITE_API}/login`, {
         username: username,
         password: password,
       });

@@ -17,7 +17,7 @@ var app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:3000", // อนุญาตให้โดเมนนี้เข้าถึง
+    origin: ["http://localhost:5000", "http://localhost:5173"], // อนุญาตให้โดเมนนี้เข้าถึง
     methods: ["get", "post", "put", "delete"], // วิธีที่อนุญาต
     credentials: true, // ถ้าคุณต้องการส่ง cookies หรือ HTTP Auth
   })
